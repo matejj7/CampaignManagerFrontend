@@ -2,25 +2,28 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function UserForm({ onUserCreated }) {
-  const [userName, setUserName] = useState('');  // Zmieniamy tutaj na userName, a nie name
+  const [userName, setUserName] = useState('');  
   const [emeraldFunds, setEmeraldFunds] = useState('');
   const [message, setMessage] = useState('');
+
+  // Używamy zmiennej środowiskowej dla adresu backendu
+  const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
   const handleSubmit = (e) => {
     e.preventDefault();
   
     const user = {
-      userName: userName, // Pasuje do pola w backendzie
+      userName: userName, 
       emeraldFunds: parseFloat(emeraldFunds),
     };
   
-    console.log('User data being sent:', user); // Sprawdzenie danych przed wysłaniem
+    console.log('User data being sent:', user); 
   
-    axios.post('http://localhost:8080/api/users', user)
+    axios.post(`${apiUrl}/api/users`, user)
     .then(response => {
-      console.log('Response from server:', response.data);  // Logowanie odpowiedzi serwera
+      console.log('Response from server:', response.data);  
       setMessage('User added successfully!');
-      onUserCreated(response.data.id); // Pass userId back to parent component
+      onUserCreated(response.data.id); 
     })
     .catch(error => {
       setMessage('Error adding user');
@@ -37,8 +40,8 @@ function UserForm({ onUserCreated }) {
           <label>User Name:</label>
           <input
             type="text"
-            value={userName}  // Używamy tutaj userName, a nie name
-            onChange={(e) => setUserName(e.target.value)} // Poprawiona zmienna
+            value={userName}  
+            onChange={(e) => setUserName(e.target.value)} 
             required
           />
         </div>

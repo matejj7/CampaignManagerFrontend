@@ -7,6 +7,9 @@ function App() {
   const [userId, setUserId] = useState(null);
   const [campaigns, setCampaigns] = useState([]);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
+  
+  // Use environment variable for backend URL
+  const apiUrl = process.env.REACT_APP_BACKEND_URL;
 
   // Fetch campaigns from the server
   useEffect(() => {
@@ -16,7 +19,7 @@ function App() {
   }, [userId]);
 
   const fetchCampaigns = () => {
-    axios.get('http://localhost:8080/api/campaigns')
+    axios.get(`${apiUrl}/api/campaigns`)
       .then(response => {
         setCampaigns(response.data);
       })
@@ -41,7 +44,7 @@ function App() {
   };
 
   const handleDelete = (campaignId) => {
-    axios.delete(`http://localhost:8080/api/campaigns/${campaignId}`)
+    axios.delete(`${apiUrl}/api/campaigns/${campaignId}`)
       .then(() => {
         fetchCampaigns(); // Refresh the campaign list after deletion
       })

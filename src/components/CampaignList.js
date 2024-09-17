@@ -4,15 +4,18 @@ import axios from 'axios';
 function CampaignList() {
   const [campaigns, setCampaigns] = useState([]);
 
+  // Używamy zmiennej środowiskowej dla adresu backendu
+  const apiUrl = process.env.REACT_APP_BACKEND_URL;
+
   useEffect(() => {
-    axios.get('http://localhost:8080/api/campaigns')
+    axios.get(`${apiUrl}/api/campaigns`)
       .then(response => {
         setCampaigns(response.data);
       })
       .catch(error => {
         console.error('There was an error fetching the campaigns!', error);
       });
-  }, []);
+  }, [apiUrl]);
 
   return (
     <div>
