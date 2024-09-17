@@ -7,7 +7,7 @@ function UserForm({ onUserCreated }) {
   const [message, setMessage] = useState('');
 
   // Używamy zmiennej środowiskowej dla adresu backendu
-  const apiUrl = process.env.REACT_APP_BACKEND_URL;
+  const apiUrl = "https://campaign-manager-backend-24fb5ef8834e.herokuapp.com";
 
   const handleSubmit = (e) => {
     e.preventDefault();
