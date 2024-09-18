@@ -104,8 +104,6 @@ function App() {
                 <p><strong>Town:</strong> {campaign.town}</p>
                 <p><strong>Radius:</strong> {campaign.radius} km</p>
                 <p><strong>User Name:</strong> {campaign.user.userName}</p>
-                <p><strong>User's Initial Balance:</strong> {campaign.user.initialBalance}</p>
-                <p><strong>User's New Balance:</strong> {campaign.user.newBalance}</p>
                 <button onClick={() => handleEdit(campaign)}>Edit</button>
                 <button onClick={() => handleDelete(campaign.id)}>Delete</button>
               </li>
