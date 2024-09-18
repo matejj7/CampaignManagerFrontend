@@ -4,8 +4,8 @@ import CampaignForm from './components/CampaignForm';
 import UserForm from './components/UserForm';
 
 function App() {
-  const [userId, setUserId] = useState(localStorage.getItem('userId')); // Sprawdza, czy istnieje userId w localStorage
-  const [userBalance, setUserBalance] = useState(Number(localStorage.getItem('userBalance')) || 0); // Upewniamy się, że userBalance jest liczbą
+  const [userId, setUserId] = useState(localStorage.getItem('userId')); 
+  const [userBalance, setUserBalance] = useState(Number(localStorage.getItem('userBalance')) || 0); 
   const [campaigns, setCampaigns] = useState([]);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
 
@@ -15,7 +15,7 @@ function App() {
   useEffect(() => {
     if (userId) {
       fetchCampaigns();
-      fetchUserBalance(); // Pobieranie balansu użytkownika
+      fetchUserBalance(); 
     }
   }, [userId]);
 
@@ -34,7 +34,7 @@ function App() {
       .then(response => {
         const balance = response.data.emeraldFunds;
         setUserBalance(balance);
-        localStorage.setItem('userBalance', balance); // Zapisywanie balansu w localStorage
+        localStorage.setItem('userBalance', balance); 
       })
       .catch(error => {
         console.error('Error fetching user balance', error);
@@ -43,7 +43,7 @@ function App() {
 
   const handleUserCreated = (newUserId) => {
     setUserId(newUserId); // Set the user ID once the user is created
-    localStorage.setItem('userId', newUserId); // Zapisujemy userId w localStorage
+    localStorage.setItem('userId', newUserId); 
     setCampaigns([]); // Clear the campaign list when a new user is created or logged in
     setSelectedCampaign(null); // Reset the selected campaign
   };
@@ -68,11 +68,11 @@ function App() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('userId'); // Usuwamy userId z localStorage
-    localStorage.removeItem('userBalance'); // Usuwamy balans z localStorage
-    setUserId(null); // Resetujemy stan użytkownika
-    setUserBalance(0); // Resetujemy balans
-    setCampaigns([]); // Resetujemy listę kampanii
+    localStorage.removeItem('userId'); 
+    localStorage.removeItem('userBalance'); 
+    setUserId(null); 
+    setUserBalance(0); 
+    setCampaigns([]); 
   };
 
   return (
