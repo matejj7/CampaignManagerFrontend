@@ -80,9 +80,14 @@ function App() {
                 <p><strong>Status:</strong> {campaign.status ? "On" : "Off"}</p>
                 <p><strong>Town:</strong> {campaign.town}</p>
                 <p><strong>Radius:</strong> {campaign.radius} km</p>
-                <p><strong>User Name:</strong> {campaign.user.userName}</p>
-                <p><strong>User's Initial Balance:</strong> {campaign.user.initialBalance}</p>
-                <p><strong>User's New Balance:</strong> {campaign.user.newBalance}</p>
+                {campaign.user && (
+                <>
+                  <p><strong>User Name:</strong> {campaign.user.userName}</p>
+                  <p><strong>User's Initial Balance:</strong> {campaign.user.initialBalance}</p>
+                  <p><strong>User's New Balance:</strong> {campaign.user.newBalance}</p>
+                </>
+                )}
+
                 {/* Edit Button */}
                 <button onClick={() => handleEdit(campaign)}>Edit</button>
                 {/* Delete Button */}
