@@ -9,7 +9,7 @@ function App() {
   const [selectedCampaign, setSelectedCampaign] = useState(null);
   
   // Use environment variable for backend URL
-  const apiUrl = process.env.REACT_APP_BACKEND_URL;
+  const apiUrl = "https://campaign-manager-backend-24fb5ef8834e.herokuapp.com";
 
   // Fetch campaigns from the server
   useEffect(() => {

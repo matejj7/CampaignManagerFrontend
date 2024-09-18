@@ -14,8 +14,7 @@ function CampaignForm({ userId, onCampaignCreated, campaign }) {
   const [predefinedTowns, setPredefinedTowns] = useState([]);
   const [userBalance, setUserBalance] = useState(0);
 
-  const apiUrl = "https://campaign-manager-backend-24fb5ef8834e.herokuapp.com";
-
+  const apiUrl = "https://campaign-manager-backend-24fb5ef8834e.herokuapp.com"; // Adjust as needed for your backend
 
   // Fetch predefined keywords, towns, and user balance
   useEffect(() => {
@@ -40,7 +39,7 @@ function CampaignForm({ userId, onCampaignCreated, campaign }) {
     }
   }, [userId, apiUrl]);
 
-  // Gdy kampania zostanie wybrana do edycji, wypełnij formularz danymi kampanii
+  // Load campaign data when editing
   useEffect(() => {
     if (campaign) {
       setCampaignName(campaign.campaignName);
@@ -72,24 +71,24 @@ function CampaignForm({ userId, onCampaignCreated, campaign }) {
     };
 
     if (campaign) {
-      // Edytuj istniejącą kampanię
+      // Edit existing campaign
       axios.put(`${apiUrl}/api/campaigns/${campaign.id}`, campaignData)
         .then(response => {
           setMessage('Campaign updated successfully!');
           onCampaignCreated();
-          updateUserBalance(campaignFund); // Zaktualizuj saldo
+          updateUserBalance(campaignFund); // Update user balance
         })
         .catch(error => {
           setMessage('Error updating campaign');
           console.error('There was an error!', error);
         });
     } else {
-      // Utwórz nową kampanię
+      // Create new campaign
       axios.post(`${apiUrl}/api/campaigns/${userId}`, campaignData)
         .then(response => {
           setMessage('Campaign added successfully!');
           onCampaignCreated();
-          updateUserBalance(campaignFund); // Zaktualizuj saldo
+          updateUserBalance(campaignFund); // Update user balance
         })
         .catch(error => {
           setMessage('Error adding campaign');
@@ -100,7 +99,7 @@ function CampaignForm({ userId, onCampaignCreated, campaign }) {
 
   const updateUserBalance = (fundAmount) => {
     const newBalance = userBalance - parseFloat(fundAmount);
-    setUserBalance(newBalance); // Aktualizuj saldo w interfejsie użytkownika
+    setUserBalance(newBalance); // Update balance in the UI
 
     axios.put(`${apiUrl}/api/users/${userId}/update-balance`, {
       emeraldFunds: newBalance
@@ -112,7 +111,83 @@ function CampaignForm({ userId, onCampaignCreated, campaign }) {
       <h2>{campaign ? 'Edit Campaign' : 'Create a New Campaign'}</h2>
       <p><strong>Current Balance:</strong> ${userBalance.toFixed(2)}</p>
       <form onSubmit={handleSubmit}>
-        {/* Reszta formularza */}
+        <div>
+          <label>Campaign Name:</label>
+          <input
+            type="text"
+            value={campaignName}
+            onChange={(e) => setCampaignName(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Keywords:</label>
+          <input
+            type="text"
+            list="keyword-options" // Use datalist for predefined keywords
+            value={keywords}
+            onChange={(e) => setKeywords(e.target.value)}
+            required
+          />
+          <datalist id="keyword-options">
+            {predefinedKeywords.map((keyword, index) => (
+              <option key={index} value={keyword} />
+            ))}
+          </datalist>
+      </div>
+        <div>
+          <label>Bid Amount:</label>
+          <input
+            type="number"
+            value={bidAmount}
+            onChange={(e) => setBidAmount(e.target.value)}
+            min="1.00"
+            step="0.01"
+            required
+          />
+        </div>
+        <div>
+          <label>Campaign Fund:</label>
+          <input
+            type="number"
+            value={campaignFund}
+            onChange={(e) => setCampaignFund(e.target.value)}
+            min="0.01"
+            required
+          />
+        </div>
+        <div>
+          <label>Status:</label>
+          <select value={status} onChange={(e) => setStatus(e.target.value === 'true')} required>
+            <option value="false">Off</option>
+            <option value="true">On</option>
+          </select>
+        </div>
+        <div>
+          <label>Town:</label>
+          <select
+            value={town}
+            onChange={(e) => setTown(e.target.value)}
+            required
+          >
+            <option value="">Select a town</option>
+            {predefinedTowns.map((townOption, index) => (
+              <option key={index} value={townOption}>
+                {townOption}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label>Radius (in kilometers):</label>
+          <input
+            type="number"
+            value={radius}
+            onChange={(e) => setRadius(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">{campaign ? 'Update Campaign' : 'Create Campaign'}</button>
       </form>
       {message && <p>{message}</p>}
       <p><strong>New Balance:</strong> ${userBalance.toFixed(2)}</p>
