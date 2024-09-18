@@ -72,6 +72,7 @@ function App() {
     localStorage.removeItem('userBalance'); // Usuwamy balans z localStorage
     setUserId(null); // Resetujemy stan użytkownika
     setUserBalance(0); // Resetujemy balans
+    setCampaigns([]); // Resetujemy listę kampanii
   };
 
   return (
@@ -82,13 +83,13 @@ function App() {
       
       {userId && (
         <>
-          <p><strong>User Balance:</strong> ${Number(userBalance).toFixed(2)}</p> {/* Konwertujemy userBalance na liczbę */}
-          <button onClick={handleLogout}>Logout</button> {/* Przycisk do wylogowania */}
+          <p><strong>User Balance:</strong> ${Number(userBalance).toFixed(2)}</p>
+          <button onClick={handleLogout}>Logout</button>
           
           <CampaignForm 
             userId={userId} 
             onCampaignCreated={handleCampaignCreated} 
-            campaign={selectedCampaign} // Pass the selected campaign for editing
+            campaign={selectedCampaign} 
           />
 
           <h2>Campaign List</h2>
