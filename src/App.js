@@ -5,18 +5,17 @@ import UserForm from './components/UserForm';
 
 function App() {
   const [userId, setUserId] = useState(localStorage.getItem('userId')); // Sprawdza, czy istnieje userId w localStorage
-  const [userBalance, setUserBalance] = useState(localStorage.getItem('userBalance') || 0); // Przechowujemy również balans użytkownika
+  const [userBalance, setUserBalance] = useState(Number(localStorage.getItem('userBalance')) || 0); // Upewniamy się, że userBalance jest liczbą
   const [campaigns, setCampaigns] = useState([]);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
 
-  // Use environment variable for backend URL
   const apiUrl = "https://campaign-manager-backend-24fb5ef8834e.herokuapp.com";
 
   // Fetch campaigns from the server
   useEffect(() => {
     if (userId) {
       fetchCampaigns();
-      fetchUserBalance(); // Pobieranie balansu użytkownika po zapisaniu
+      fetchUserBalance(); // Pobieranie balansu użytkownika
     }
   }, [userId]);
 
@@ -79,13 +78,11 @@ function App() {
     <div>
       <h1>Campaign Manager</h1>
       
-      {/* Jeśli użytkownik nie istnieje, pokaż formularz dodawania */}
       {!userId && <UserForm onUserCreated={handleUserCreated} />}
       
-      {/* Jeśli użytkownik istnieje, pokaż jego saldo i listę kampanii */}
       {userId && (
         <>
-          <p><strong>User Balance:</strong> ${userBalance.toFixed(2)}</p>
+          <p><strong>User Balance:</strong> ${Number(userBalance).toFixed(2)}</p> {/* Konwertujemy userBalance na liczbę */}
           <button onClick={handleLogout}>Logout</button> {/* Przycisk do wylogowania */}
           
           <CampaignForm 
@@ -105,9 +102,7 @@ function App() {
                 <p><strong>Status:</strong> {campaign.status ? "On" : "Off"}</p>
                 <p><strong>Town:</strong> {campaign.town}</p>
                 <p><strong>Radius:</strong> {campaign.radius} km</p>
-                {/* Edit Button */}
                 <button onClick={() => handleEdit(campaign)}>Edit</button>
-                {/* Delete Button */}
                 <button onClick={() => handleDelete(campaign.id)}>Delete</button>
               </li>
             ))}
