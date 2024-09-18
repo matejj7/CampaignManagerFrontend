@@ -6,7 +6,6 @@ function UserForm({ onUserCreated }) {
   const [emeraldFunds, setEmeraldFunds] = useState('');
   const [message, setMessage] = useState('');
 
-  // Używamy zmiennej środowiskowej dla adresu backendu
   const apiUrl = "https://campaign-manager-backend-24fb5ef8834e.herokuapp.com";
 
   const handleSubmit = (e) => {

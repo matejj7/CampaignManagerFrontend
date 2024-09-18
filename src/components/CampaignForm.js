@@ -14,7 +14,8 @@ function CampaignForm({ userId, onCampaignCreated, campaign }) {
   const [predefinedTowns, setPredefinedTowns] = useState([]);
   const [userBalance, setUserBalance] = useState(0);
 
-  const apiUrl = process.env.REACT_APP_BACKEND_URL; // Now we use this for API calls
+  const apiUrl = "https://campaign-manager-backend-24fb5ef8834e.herokuapp.com";
+
 
   // Fetch predefined keywords, towns, and user balance
   useEffect(() => {

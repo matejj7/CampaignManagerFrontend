@@ -4,8 +4,7 @@ import axios from 'axios';
 function CampaignList() {
   const [campaigns, setCampaigns] = useState([]);
 
-  // Używamy zmiennej środowiskowej dla adresu backendu
-  const apiUrl = process.env.REACT_APP_BACKEND_URL;
+  const apiUrl = "https://campaign-manager-backend-24fb5ef8834e.herokuapp.com";
 
   useEffect(() => {
     axios.get(`${apiUrl}/api/campaigns`)
