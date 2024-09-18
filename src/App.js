@@ -4,10 +4,11 @@ import CampaignForm from './components/CampaignForm';
 import UserForm from './components/UserForm';
 
 function App() {
-  const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState(localStorage.getItem('userId')); // Sprawdza, czy istnieje userId w localStorage
+  const [userBalance, setUserBalance] = useState(localStorage.getItem('userBalance') || 0); // Przechowujemy również balans użytkownika
   const [campaigns, setCampaigns] = useState([]);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
-  
+
   // Use environment variable for backend URL
   const apiUrl = "https://campaign-manager-backend-24fb5ef8834e.herokuapp.com";
 
@@ -15,6 +16,7 @@ function App() {
   useEffect(() => {
     if (userId) {
       fetchCampaigns();
+      fetchUserBalance(); // Pobieranie balansu użytkownika po zapisaniu
     }
   }, [userId]);
 
@@ -28,8 +30,21 @@ function App() {
       });
   };
 
+  const fetchUserBalance = () => {
+    axios.get(`${apiUrl}/api/users/${userId}`)
+      .then(response => {
+        const balance = response.data.emeraldFunds;
+        setUserBalance(balance);
+        localStorage.setItem('userBalance', balance); // Zapisywanie balansu w localStorage
+      })
+      .catch(error => {
+        console.error('Error fetching user balance', error);
+      });
+  };
+
   const handleUserCreated = (newUserId) => {
     setUserId(newUserId); // Set the user ID once the user is created
+    localStorage.setItem('userId', newUserId); // Zapisujemy userId w localStorage
     setCampaigns([]); // Clear the campaign list when a new user is created or logged in
     setSelectedCampaign(null); // Reset the selected campaign
   };
@@ -53,16 +68,26 @@ function App() {
       });
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('userId'); // Usuwamy userId z localStorage
+    localStorage.removeItem('userBalance'); // Usuwamy balans z localStorage
+    setUserId(null); // Resetujemy stan użytkownika
+    setUserBalance(0); // Resetujemy balans
+  };
+
   return (
     <div>
       <h1>Campaign Manager</h1>
       
-      {/* If user is not created, show UserForm */}
+      {/* Jeśli użytkownik nie istnieje, pokaż formularz dodawania */}
       {!userId && <UserForm onUserCreated={handleUserCreated} />}
       
-      {/* After user is created, show CampaignForm */}
+      {/* Jeśli użytkownik istnieje, pokaż jego saldo i listę kampanii */}
       {userId && (
         <>
+          <p><strong>User Balance:</strong> ${userBalance.toFixed(2)}</p>
+          <button onClick={handleLogout}>Logout</button> {/* Przycisk do wylogowania */}
+          
           <CampaignForm 
             userId={userId} 
             onCampaignCreated={handleCampaignCreated} 
@@ -80,14 +105,6 @@ function App() {
                 <p><strong>Status:</strong> {campaign.status ? "On" : "Off"}</p>
                 <p><strong>Town:</strong> {campaign.town}</p>
                 <p><strong>Radius:</strong> {campaign.radius} km</p>
-                {campaign.user && (
-                <>
-                  <p><strong>User Name:</strong> {campaign.user.userName}</p>
-                  <p><strong>User's Initial Balance:</strong> {campaign.user.initialBalance}</p>
-                  <p><strong>User's New Balance:</strong> {campaign.user.newBalance}</p>
-                </>
-                )}
-
                 {/* Edit Button */}
                 <button onClick={() => handleEdit(campaign)}>Edit</button>
                 {/* Delete Button */}
